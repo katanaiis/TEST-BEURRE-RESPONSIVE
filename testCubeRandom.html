@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>testCubeRandom</title>
+    <link rel="stylesheet" href="main.css"/>
+    <script type="text/javascript" src="../libs/three-r121.js"></script>
+    <script type="text/javascript" src="../libs/dat.gui.js"></script>
+</head>
+
+<body>
+
+    <div id="WebGL-output"></div>
+
+    <div id="overlay"><button id="startButton" align=top>Play</button>
+    </div>
+    
+    <script type="text/javascript">
+        var block = [];
+        var scene, camera, renderer, spotlight;
+        var compteur = 0;
+
+        var state = 0;
+        var startDate;
+
+        var alpha = 0;
+        var controlerUI = {
+            cameraX: -30,
+            cameraY: 40,
+            cameraZ: 30
+        };
+
+        // Gérer le click sur le boton start en appelant la fonction init()
+        var startButton = document.getElementById('startButton');
+        startButton.addEventListener('click', init);
+
+
+        function init() {
+            var gui = new dat.GUI();
+            gui.add(controlerUI, 'cameraX', -100, 100);
+            gui.add(controlerUI, 'cameraY', -100, 100);
+            gui.add(controlerUI, 'cameraZ', -100, 100);
+
+            //retirer le boiuton de l'écran
+            var overlay = document.getElementById('overlay');
+            overlay.remove();
+
+            //lire le fichier audio
+            var listener = new THREE.AudioListener();
+            var audio = new THREE.Audio(listener);
+            var file = './chill-wave-by-kevin-macleod-from-filmmusic-io.mp3';
+            var mediaElement = new Audio(file);
+            mediaElement.play();
+            audio.setMediaElementSource(mediaElement);
+
+            scene = new THREE.Scene();
+
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.x = -30;
+            camera.position.y = 40;
+            camera.position.z = 30;
+            camera.lookAt(scene.position);
+            scene.add(camera);
+
+            var geometry = new THREE.CubeGeometry(5, 5, 5);
+            var material = new THREE.MeshPhongMaterial({
+                color: 0xcccccc
+            });
+
+            for (var i = 0; i < 100; i++) {
+                block[i] = new THREE.Mesh(geometry, material);
+                block[i].position.x = Math.random() * 40 - 20;
+                block[i].position.y = Math.random() * 40 - 20;
+                block[i].position.z = Math.random() * 40 - 20;
+                scene.add(block[i]);
+            }
+
+
+            spotLight = new THREE.SpotLight(0xffffff, 1);
+            spotLight.position.set(-40, 60, -10);
+            scene.add(spotLight);
+
+
+            renderer = new THREE.WebGLRenderer({
+                antialias: true
+            });
+            renderer.setClearColor(0xFFFFFF);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            document.getElementById("WebGL-output").appendChild(renderer.domElement);
+            
+            state = 1;
+            
+            // On note l'heure de départ
+            startDate = Date.now();
+
+            render();
+
+        };
+
+        function render() {
+            alpha += 0.02;
+            for (var i = 0; i < 100; i++) {
+                block[i].material.color = new THREE.Color(Math.abs(Math.sin(alpha + i + 0.3)), Math.abs(Math.sin(alpha + i - 1)), Math.abs(Math.sin(alpha + i + 2)));
+            }
+
+            switch (state) {
+                    
+                    //////////////////// trio //////////////////
+                case 1:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 1500) state = 2
+                    break;
+
+                case 2:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 2000) state = 3
+                    break;
+                    
+                case 3:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 2500) state = 4
+                    break;
+                
+                case 4:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 5500) state = 5
+                    break;
+                    
+                case 5:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 6000) state = 6
+                    break;
+                    
+                case 6:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 6500) state = 7
+                    break;
+                    
+                case 7:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 7000) state = 8
+                    break
+                    
+                case 8:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 9500) state = 9
+                    break;
+                    
+                    
+                    ////////////////////////////////////////////
+                    
+                    
+                case 9:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 11000) state = 10
+                    break;
+
+                case 10:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 11500) state = 11
+                    break;
+                    
+                case 11:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 12000) state = 12
+                    break;
+                
+                case 12:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 15000) state = 13
+                    break;
+                    
+                case 13:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 15500) state = 14
+                    break;
+                    
+                case 14:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 16000) state = 15
+                    break;
+                    
+                case 15:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 16500) state = 16
+                    break
+                    
+                case 16:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 19000) state = 17
+                    break;
+                    
+                    
+                /////////////////////////////////////////////////
+                    
+                    
+                case 17:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 20500) state = 18
+                    break;
+
+                case 18:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 21000) state = 19
+                    break;
+                    
+                case 19:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 21500) state = 20
+                    break;
+                
+                case 20:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 25000) state = 21
+                    break;
+                    
+                case 21:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 25500) state = 22
+                    break;
+                    
+                case 22:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 26000) state = 23
+                    break;
+                    
+                case 23:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 26500) state = 24
+                    break
+                    
+                case 24:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 28500) state = 25
+                    break;
+                    
+                    
+                ////////////////////////////////////////////////////
+                    
+                case 25:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 30500) state = 26
+                    break;
+
+                case 26:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 31000) state = 27
+                    break;
+                    
+                case 27:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 31500) state = 28
+                    break;
+                
+                case 28:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 34500) state = 29
+                    break;
+                    
+                case 29:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 35000) state = 30
+                    break;
+                    
+                case 30:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 35500) state = 31
+                    break;
+                    
+                case 31:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 36000) state = 32
+                    break
+                    
+                case 32:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 38500) state = 33
+                    break;
+                    
+                    
+                /////////////////////////boucle 1/////////////////////////
+                    
+                case 33:
+                    compteur++;
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if ((Date.now() - startDate > 39000) && (compteur>30)){
+                        compteur = 0;
+                       state = 34;
+                    
+                    } 
+                    break;
+                    
+                case 34:
+                    compteur++;
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if ((Date.now() - startDate > 39500) && ( compteur>30)){
+                        compteur=0;
+                            state = 33;
+                        } 
+                    if (Date.now() - startDate > 58000) state = 35
+                    break;
+                    
+                ////////////////////////calme///////////////////////////
+                    
+                case 35:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 77000) state = 36
+                    break;
+                    
+                /////////////////////////boucle 2/////////////////////////
+                    
+                case 36:
+                    compteur++;
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if ((Date.now() - startDate > 77500) && (compteur>30)){
+                        compteur = 0;
+                       state = 37;
+                    
+                    } 
+                    break;
+                    
+                case 37:
+                    compteur++;
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if ((Date.now() - startDate > 78000) && ( compteur>30)){
+                        compteur=0;
+                            state = 36;
+                        } 
+                    if (Date.now() - startDate > 96000) state = 38
+                    break;
+                    
+                ///////////////////////trio2////////////////////////////
+                    
+                case 38:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 97500) state = 39
+                    break;
+
+                case 39:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 98000) state = 40
+                    break;
+                    
+                case 40:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 98500) state = 41
+                    break;
+                
+                case 41:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate >  101500 ) state = 42
+                    break;
+                    
+                case 42:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 102000 ) state = 43
+                    break;
+                    
+                case 43:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 102500 ) state = 44
+                    break;
+                    
+                case 44:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 103000 ) state = 45
+                    break
+                    
+                case 45:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 105500 ) state = 46
+                    break;
+                    
+                    
+                    ////////////////////////////////////////////
+                    
+                case 46:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 107000) state = 47
+                    break;
+
+
+                case 47:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 107500) state = 48
+                    break;
+                    
+                case 48:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 108000 ) state = 49
+                    break;
+                
+                case 49:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate >  111000  ) state = 50
+                    break;
+                    
+
+                case 50:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 111500  ) state = 51
+                    break;
+                    
+                case 51:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 112000  ) state = 52
+                    break;
+                    
+                case 52:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 112500  ) state = 53
+                    break
+                    
+                case 53:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 115000  ) state = 54
+                    break;
+                    
+                    ///////////////////////////////////////////////////
+                    
+                case 54:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 116500 ) state = 55
+                    break;
+
+                case 55:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 117000 ) state = 56
+                    break;
+                    
+                case 56:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate >117500 ) state = 57
+                    break;
+                
+                case 57:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate >120500  ) state = 58
+                    break;
+                    
+                case 58:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate >121000 ) state = 59
+                    break;
+                    
+                case 59:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate >121500 ) state = 60
+                    break;
+                    
+                case 60:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate >122000  ) state = 61
+                    break
+                    
+                case 61:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate >124500  ) state = 62
+                    break;
+                    
+                    /////////////////////////////////////////////////
+                    
+                case 62:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 126000) state = 63
+                    break;
+
+
+                case 63:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 126500) state = 64
+                    break;
+                    
+                case 64:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 127000 ) state = 65
+                    break;
+                
+                case 65:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate >  130000  ) state = 66
+                    break;
+                    
+
+                case 66:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 130500  ) state = 67
+                    break;
+                    
+                case 67:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 131000  ) state = 68
+                    break;
+                    
+                case 68:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 131500  ) state = 69
+                    break
+                    
+                case 69:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 134000  ) state = 70
+                    break;
+
+                    
+                /////////////////////////boucle 3//////////////////////////////
+                    
+                case 70:
+                    compteur++;
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if ((Date.now() - startDate > 134500) && (compteur>30)){
+                        compteur = 0;
+                       state = 71;
+                    
+                    } 
+                    break;
+                    
+                case 71:
+                    compteur++;
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if ((Date.now() - startDate > 135000) && ( compteur>30)){
+                        compteur=0;
+                            state = 70;
+                        } 
+                    if (Date.now() - startDate > 173000) state = 72
+                    break;
+                    
+                    
+                ////////////////////////////trio3////////////////////////////
+                    
+                    
+                case 72:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 174500 ) state = 73
+                    break;
+
+                case 73:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 175000 ) state = 74
+                    break;
+                    
+                case 74:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 175500 ) state = 75
+                    break;
+                
+                case 75:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 178500 ) state = 76
+                    break;
+                    
+                case 76:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 179000 ) state = 77
+                    break;
+                    
+                case 77:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 179500 ) state = 78
+                    break;
+                    
+                case 78:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 180000 ) state = 79
+                    break
+                    
+                case 79:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 182500 ) state = 80
+                    break;
+                    
+                    ////////////////////////////////////////////////
+                    
+                case 80:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 184000  ) state = 81
+                    break;
+
+                case 81:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate >184500  ) state = 82
+                    break;
+                    
+                case 82:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate >185000  ) state = 83
+                    break;
+                
+                case 83:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate >188000  ) state = 84
+                    break;
+                    
+                case 84:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate >188500  ) state = 85
+                    break;
+                    
+                case 85:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate >189000  ) state = 86
+                    break;
+                    
+                case 86:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate >189500  ) state = 87
+                    break
+                    
+                case 87:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate >192000  ) state = 88
+                    break;
+                    
+                ///////////////////////////////////////////////////////
+                   
+                case 88:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate >193500  ) state = 89
+                    break;
+
+                case 89:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate >194000  ) state = 90
+                    break;
+                    
+                case 90:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate >194500  ) state = 91
+                    break;
+                
+                case 91:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate >197500  ) state = 92
+                    break;
+                    
+                case 92:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate >198000  ) state = 93
+                    break;
+                    
+                case 93:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate >198500  ) state = 94
+                    break;
+                    
+                case 94:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate >199000  ) state = 95
+                    break
+                    
+                case 95:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate >201500  ) state = 96
+                    break;
+                    
+                    ////////////////////////////////////////////////
+                    
+                case 96:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate > 203000   ) state = 97
+                    break;
+
+                case 97:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate >203500   ) state = 98
+                    break;
+                    
+                case 98:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate >204000   ) state = 99
+                    break;
+                
+                case 99:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate >207000   ) state = 100
+                    break;
+                    
+                case 100:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate >207500   ) state = 101
+                    break;
+                    
+                case 101:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate >208000   ) state = 102
+                    break;
+                    
+                case 102:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z += 0.01;
+                    }
+                    if (Date.now() - startDate >208500   ) state = 103
+                    break
+                    
+                case 103:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate >211000   ) state = 104
+                    break;
+                  
+                ////////////////////////calme/////////////////////////////
+                    
+                case 104:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0.01;
+                    }
+                    if (Date.now() - startDate > 231000) state = 105
+                    break;
+                    
+                /////////////////////////arret fin////////////////////////////////
+                    
+                case 105:
+                    for (var i = 0; i < 100; i++) {
+                        block[i].rotation.z -= 0;
+                    }
+                    if (Date.now() - startDate > 241000) 
+                    break;
+            }
+
+            requestAnimationFrame(render);
+            renderer.render(scene, camera);
+
+            //UI camera
+            camera.position.x = controlerUI.cameraX;
+            camera.position.y = controlerUI.cameraY;
+            camera.position.z = controlerUI.cameraZ;
+            camera.lookAt(scene.position);
+        };
+
+    </script>
+</body>
+
+</html>
